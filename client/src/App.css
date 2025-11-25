@@ -1,1 +1,51 @@
 @import "tailwindcss";
+
+:root {
+  --medical-white: #fafbfc;
+  --medical-light: #f8f9fa;
+  --medical-border: #e2e8f0;
+  --medical-gray: #64748b;
+  --medical-dark: #1e293b;
+  --medical-primary: #0ea5e9;
+  --medical-primary-dark: #0284c7;
+}
+
+.bg-medical-white {
+  background-color: var(--medical-white);
+}
+
+.bg-medical-light {
+  background-color: var(--medical-light);
+}
+
+.border-medical-border {
+  border-color: var(--medical-border);
+}
+
+.text-medical-gray {
+  color: var(--medical-gray);
+}
+
+.text-medical-dark {
+  color: var(--medical-dark);
+}
+
+.text-medical-primary {
+  color: var(--medical-primary);
+}
+
+.bg-medical-primary {
+  background-color: var(--medical-primary);
+}
+
+.bg-medical-primary-dark {
+  background-color: var(--medical-primary-dark);
+}
+
+.hover\:bg-medical-light:hover {
+  background-color: var(--medical-light);
+}
+
+.hover\:text-medical-dark:hover {
+  color: var(--medical-dark);
+}
