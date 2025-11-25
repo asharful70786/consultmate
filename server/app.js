@@ -84,12 +84,20 @@ app.post('/api/upload', upload.single("audio"), (req, res) => {
   });
 });
 
+
+
+
 // error handler
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
   console.error(err.message);
   res.status(statusCode).send(err.message);
 });
+
+
+
+
+
 
 app.listen(3000, () => {
   console.log('Server listening on port 3000!');
