@@ -1,3 +1,4 @@
+import Patient from "../Model/patient.js";
 import User from "../Model/User.js";
 import bcrypt from "bcrypt";
 
@@ -19,8 +20,6 @@ export const login = async (req, res) => {
 
   try {
     const user = await User.findOne({ email });
-   console.log("DB password:", user.password);
-
     if (!user) return res.status(404).send("User not found");
 
 
@@ -65,4 +64,39 @@ export const userDetails = async(req, res) => {
   console.log("error on userDetails Route " , error.message );
   res.status(500).json({ error: error.message });  
  }
+}
+
+
+
+export const stacks =  async (req, res) => {
+  try {
+    const totalPatients = await Patient.countDocuments();
+
+    const monthStart = new Date();
+    monthStart.setDate(1);
+    monthStart.setHours(0, 0, 0, 0);
+
+    const newPatients = await Patient.countDocuments({
+      createdAt: { $gte: monthStart },
+    });
+
+    // const totalNotes = await Note.countDocuments();
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    // const todayNotes = await Note.countDocuments({
+    //   createdAt: { $gte: today },
+    // });
+
+    res.json({
+      totalPatients,
+      newPatients,
+      // totalNotes,
+      // todayNotes,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: "Server error" });
+  }
 }

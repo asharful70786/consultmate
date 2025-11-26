@@ -1,4 +1,10 @@
 import Patient from "../Model/patient.js";
+import clearOldAudio from "../utils/Cleaner.js";
+
+
+// ===== MULTER SETUP =====
+
+
 
 
 export const addNewPatient =  async (req, res) => {
@@ -43,3 +49,22 @@ export const individual_Patient = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+
+export const upload_Audio =  async(req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ error: "No audio file received" });
+  }
+   console.log("patient_Mongoose_Id:", req.body.patient_Mongoose_Id);
+
+  clearOldAudio(req.file.filename);
+
+  res.json({
+    message: "File uploaded successfully",
+    file: req.file.filename,
+    path: `/uploads/${req.file.filename}`,
+    patient: req.body
+  });
+}
+
+
