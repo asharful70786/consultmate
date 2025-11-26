@@ -34,10 +34,10 @@ export default function PatientDetails() {
   }, [id]);
 
   const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
     });
   };
 
@@ -46,11 +46,14 @@ export default function PatientDetails() {
     const today = new Date();
     let age = today.getFullYear() - birthDate.getFullYear();
     const monthDiff = today.getMonth() - birthDate.getMonth();
-    
-    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+
+    if (
+      monthDiff < 0 ||
+      (monthDiff === 0 && today.getDate() < birthDate.getDate())
+    ) {
       age--;
     }
-    
+
     return age;
   };
 
@@ -80,7 +83,7 @@ export default function PatientDetails() {
   }
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
+    <div className="p-6 max-w-5xl mx-auto">
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center justify-between mb-4">
@@ -95,7 +98,7 @@ export default function PatientDetails() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Patient Information Card */}
+        {/* Patient Info Section */}
         <div className="lg:col-span-2">
           <div className="bg-white border border-gray-200 rounded-lg shadow-sm">
             {/* Patient Header */}
@@ -107,17 +110,23 @@ export default function PatientDetails() {
                   </span>
                 </div>
                 <div>
-                  <h2 className="text-xl font-semibold text-gray-900">{patient.name}</h2>
-                  <p className="text-gray-600 text-sm">Patient ID: {patient.patientId}</p>
+                  <h2 className="text-xl font-semibold text-gray-900">
+                    {patient.name}
+                  </h2>
+                  <p className="text-gray-600 text-sm">
+                    Patient ID: {patient.patientId}
+                  </p>
                 </div>
               </div>
             </div>
 
-            {/* Patient Details */}
+            {/* Details */}
             <div className="p-6 space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="text-sm font-medium text-gray-500">Date of Birth</label>
+                  <label className="text-sm font-medium text-gray-500">
+                    Date of Birth
+                  </label>
                   <p className="text-gray-900 mt-1">
                     {formatDate(patient.dob)} ({calculateAge(patient.dob)} years)
                   </p>
@@ -125,21 +134,29 @@ export default function PatientDetails() {
 
                 {patient.gender && (
                   <div>
-                    <label className="text-sm font-medium text-gray-500">Gender</label>
-                    <p className="text-gray-900 mt-1 capitalize">{patient.gender}</p>
+                    <label className="text-sm font-medium text-gray-500">
+                      Gender
+                    </label>
+                    <p className="text-gray-900 mt-1 capitalize">
+                      {patient.gender}
+                    </p>
                   </div>
                 )}
 
                 {patient.phone && (
                   <div>
-                    <label className="text-sm font-medium text-gray-500">Phone</label>
+                    <label className="text-sm font-medium text-gray-500">
+                      Phone
+                    </label>
                     <p className="text-gray-900 mt-1">{patient.phone}</p>
                   </div>
                 )}
 
                 {patient.email && (
                   <div>
-                    <label className="text-sm font-medium text-gray-500">Email</label>
+                    <label className="text-sm font-medium text-gray-500">
+                      Email
+                    </label>
                     <p className="text-gray-900 mt-1">{patient.email}</p>
                   </div>
                 )}
@@ -147,21 +164,27 @@ export default function PatientDetails() {
 
               {patient.address && (
                 <div>
-                  <label className="text-sm font-medium text-gray-500">Address</label>
+                  <label className="text-sm font-medium text-gray-500">
+                    Address
+                  </label>
                   <p className="text-gray-900 mt-1">{patient.address}</p>
                 </div>
               )}
 
               {patient.medicalHistory && (
                 <div>
-                  <label className="text-sm font-medium text-gray-500">Medical History</label>
+                  <label className="text-sm font-medium text-gray-500">
+                    Medical History
+                  </label>
                   <p className="text-gray-900 mt-1">{patient.medicalHistory}</p>
                 </div>
               )}
 
               {patient.allergies && (
                 <div>
-                  <label className="text-sm font-medium text-gray-500">Allergies</label>
+                  <label className="text-sm font-medium text-gray-500">
+                    Allergies
+                  </label>
                   <p className="text-gray-900 mt-1">{patient.allergies}</p>
                 </div>
               )}
@@ -169,11 +192,14 @@ export default function PatientDetails() {
           </div>
         </div>
 
-        {/* Recording Section */}
-        <div className="lg:col-span-1">
+        {/* Recording Card */}
+        <div>
           <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Consultation</h3>
-            <RecordingComponent />
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              Consultation Recording
+            </h3>
+
+            <RecordingComponent patient={patient} />
           </div>
         </div>
       </div>
