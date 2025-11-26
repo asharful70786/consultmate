@@ -1,6 +1,8 @@
 import Patient from "../Model/patient.js";
+import {processAudio_Capture} from "../Services/Llm/openAi.js";
 import clearOldAudio from "../utils/Cleaner.js";
-
+import extractKeyPoints from "../utils/extractKeyPoints.js";
+import DraftNote from "../Model/DraftNote.js";
 
 // ===== MULTER SETUP =====
 
@@ -51,20 +53,46 @@ export const individual_Patient = async (req, res) => {
 };
 
 
-export const upload_Audio =  async(req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ error: "No audio file received" });
+export const upload_Audio = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: "No audio file received" });
+    }
+
+    const audioPath = `uploads/${req.file.filename}`;
+
+    console.log("Audio saved:", audioPath);
+    console.log("Patient:", req.body);
+
+    // 1️⃣ Process audio with LLM
+    const llmResult = await processAudio_Capture(audioPath);
+
+     const { transcript, structuredNote } = llmResult;
+
+// Optional: extract simple key points for UI
+const keyPoints = extractKeyPoints(structuredNote);
+
+const draft = await DraftNote.create({
+  patientId: req.body.patient_Mongoose_Id,
+  transcript,
+  keyPoints,
+  structuredNote,
+  status: "draft",
+  createdAt: new Date()
+});
+
+    return res.status(200).json({
+      message: "Processing complete",
+      patientId: req.body.patient_Mongoose_Id,
+      noteId : draft._id
+    });
+
+  } catch (err) {
+    console.error(err);
+     res.status(500).json({ error: "Processing failed" });
   }
-   console.log("patient_Mongoose_Id:", req.body.patient_Mongoose_Id);
-
   clearOldAudio(req.file.filename);
-
-  res.json({
-    message: "File uploaded successfully",
-    file: req.file.filename,
-    path: `/uploads/${req.file.filename}`,
-    patient: req.body
-  });
-}
+  
+};
 
 

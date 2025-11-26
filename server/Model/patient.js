@@ -9,7 +9,16 @@ const patientSchema = new mongoose.Schema({
   address: { type: String, required: true },
   dob: { type: String, required: true },
   patientId: { type: String, unique: true },
-  createdAt: { type: Date, default: Date.now }
+  createdAt: { type: Date, default: Date.now },
+  notes: [
+    {
+      noteId: String,
+      structuredNote: String,
+      keyPoints: Object,
+      transcript: String,
+      createdAt: Date,
+    }
+  ]
  
 });
 
