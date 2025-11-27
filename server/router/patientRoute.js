@@ -1,8 +1,9 @@
 import express from "express";
 import CheckAuth from "../middleware/CheckAuth.js";
-import { addNewPatient, getAllPatients, individual_Patient, upload_Audio } from "../Controllers/patientControllers.js";
+import { addNewPatient, getAllPatients, individual_Patient, review_Draft_Note, upload_Audio } from "../Controllers/patientControllers.js";
 import Patient from "../Model/patient.js";
 import multer from "multer";
+import DraftNote from "../Model/DraftNote.js";
 
 
 
@@ -37,9 +38,7 @@ router.get("/patient/:id",CheckAuth ,  individual_Patient);
 
 router.post("/upload", CheckAuth , upload.single("audio"),  upload_Audio);
 
-
-
-
+router.get("/review/:noteId", CheckAuth, review_Draft_Note);
 
 
 

@@ -10,15 +10,9 @@ const patientSchema = new mongoose.Schema({
   dob: { type: String, required: true },
   patientId: { type: String, unique: true },
   createdAt: { type: Date, default: Date.now },
-  notes: [
-    {
-      noteId: String,
-      structuredNote: String,
-      keyPoints: Object,
-      transcript: String,
-      createdAt: Date,
-    }
-  ]
+  
+   // Only store reference IDs, nothing else
+  notes: [{ type: mongoose.Schema.Types.ObjectId, ref: "FinalNote" }]
  
 });
 

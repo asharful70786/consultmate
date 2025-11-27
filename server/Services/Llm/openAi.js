@@ -1,5 +1,6 @@
 import { OpenAI } from "openai";
 import fs from "fs";
+import basePrompt from "./prompt.js";
 
 const client = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -7,6 +8,7 @@ const client = new OpenAI({
 
 export async function processAudio_Capture(audioPath) {
   try {
+    
     const transcriptRes = await client.audio.transcriptions.create({
       file: fs.createReadStream(audioPath),
       model: "whisper-1",
@@ -15,35 +17,26 @@ export async function processAudio_Capture(audioPath) {
 
     const transcript = transcriptRes;
 
-    // 2️⃣ Generate Clinical Note
-    const prompt = `
-      You are a clinical documentation assistant.
-      Based on this conversation transcript, extract:
-      - Presenting complaint
-      - HPI
-      - Key symptoms
-      - Assessment
-      - Plan
+   
+    const finalPrompt = `  ${basePrompt} Transcript:  ${transcript} `;
 
-      Return a structured note in clean EMIS format.
-
-      Transcript:
-      ${transcript}
-    `;
 
     const noteRes = await client.chat.completions.create({
       model: "gpt-4o-mini",
-      messages: [{ role: "user", content: prompt }],
-      temperature: 0
+      messages: [
+        {
+          role: "user",
+          content: finalPrompt
+        }
+      ],
+      temperature: 0,
+      response_format: { type: "json_object" }
     });
 
+    const parsed = JSON.parse(noteRes.choices[0].message.content);
     const structuredNote = noteRes.choices[0].message.content;
-    // console.log(structuredNote)
 
-    return {
-      transcript,
-      structuredNote
-    };
+    return { transcript, structuredNote };
 
   } catch (error) {
     console.error("LLM ERROR:", error);
