@@ -54,11 +54,8 @@ export default function RecordingComponent({ patient }) {
   const formData = new FormData();
   formData.append("audio", blob);
 
-  formData.append("patientId", patient.patientId);
+
   formData.append("patient_Mongoose_Id", patient._id);
-  formData.append("patientName", patient.name);
-  formData.append("patientEmail", patient.email || "");
-  formData.append("dob", patient.dob);
 
   try {
     const res = await fetch(`${baseUrl}/upload`, {
@@ -75,8 +72,7 @@ export default function RecordingComponent({ patient }) {
       return;
     }
 
-    // 👇 NAVIGATE HERE (inside try, after successful upload)
-    navigate(`/review-note?file=${data.file}&pid=${patient._id}`);
+   navigate(`/review-note?noteId=${data.noteId}&pid=${patient._id}`)
 
   } catch (err) {
     console.error(err);

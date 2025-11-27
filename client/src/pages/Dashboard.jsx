@@ -16,7 +16,7 @@ export default function Dashboard() {
   useEffect(() => {
     const loadStats = async () => {
       try {
-        const res = await fetch(`${baseUrl}/dashboard-stats`, {
+        const res = await fetch(`${baseUrl}/auth/dashboard-stats`, {
           method: "GET",
           credentials: "include",
         });
