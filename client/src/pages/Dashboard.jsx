@@ -143,7 +143,7 @@ export default function Dashboard() {
             className="cursor-pointer bg-white rounded-2xl p-8 shadow-sm border border-gray-200 hover:shadow-lg transition-all duration-300 group hover:border-blue-200"
           >
             <div className="flex items-start gap-6">
-              <div className={`w-16 h-16 bg-${action.color}-50 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}>
+              <div className={`w-16 h-16 bg-${action.color}-100 text-${action.color}-50 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}>
                 <span className="text-2xl">{action.icon}</span>
               </div>
               

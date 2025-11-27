@@ -12,6 +12,8 @@ import AddPatient from "./pages/patient/AddPatient";
 import SelectPatient from "./pages/patient/SelectPatient";
 import Indi_PatientDetails from "./pages/patient/Indi_PatientDetails";
 import ReviewNote from "./components/ReviewNote";
+import NoteDetails from "./components/NoteDetails";
+import Profile from "./components/Profile";
 
 export default function App() {
   return (
@@ -65,11 +67,10 @@ export default function App() {
         />
 
 
-      <Route path="/review-note" element={
-        //  <MainLayout>
-        <ReviewNote />
-        // </MainLayout>
-      }/>
+      <Route path="/review-note" element={<ReviewNote />}/>
+      <Route  path="/note-details" element={<ProtectedRoute> <NoteDetails /></ProtectedRoute>  } />
+      <Route path="profile" element={<ProtectedRoute> <Profile /></ProtectedRoute>} />
+
 
 
       </Routes>

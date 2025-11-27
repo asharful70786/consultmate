@@ -171,6 +171,28 @@ export default function PatientDetails() {
                 </div>
               )}
 
+               {patient.notes && (
+                <div>
+                  <label className="text-sm font-medium text-gray-500">
+                    NoteId 
+                  </label>
+                  <ul className="text-gray-900 mt-1 space-y-1">
+  {patient.notes.map((noteId) => (
+    <li key={noteId}>
+      <a
+        href={`/note-details?noteId=${noteId}`}
+        className="text-blue-600 underline hover:text-blue-800"
+      >
+        {noteId}
+      </a>
+    </li>
+  ))}
+</ul>
+
+                </div>
+              )}
+
+
               {patient.medicalHistory && (
                 <div>
                   <label className="text-sm font-medium text-gray-500">
