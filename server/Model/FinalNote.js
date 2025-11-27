@@ -1,13 +1,30 @@
 import mongoose from "mongoose";
 
-const FinalNoteSchema = new mongoose.Schema({
-  patientId: { type: mongoose.Schema.Types.ObjectId, ref: "Patient" },
-  transcript: String,
-  keyPoints: Object,
-  structuredNote: String,
-  createdAt: { type: Date, default: Date.now }
-});
+const FinalNoteSchema = new mongoose.Schema(
+  {
+    patientId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Patient",
+      required: true,
+    },
 
-const FinalNote = mongoose.model("FinalNote", FinalNoteSchema);
+    structuredNote: {
+      type: String,
+      required: true,
+    },
 
-export default FinalNote;
+    approvedAt: {
+      type: Date,
+      default: Date.now,
+    },
+
+    approvedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Doctor", // optional
+      default: null,
+    },
+  },
+  { timestamps: true }
+);
+
+export default mongoose.model("FinalNote", FinalNoteSchema);

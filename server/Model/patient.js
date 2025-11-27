@@ -11,10 +11,12 @@ const patientSchema = new mongoose.Schema({
   patientId: { type: String, unique: true },
   createdAt: { type: Date, default: Date.now },
   
-   // Only store reference IDs, nothing else
-  notes: [{ type: mongoose.Schema.Types.ObjectId, ref: "FinalNote" }]
- 
-});
+  notes: [  {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "FinalNote",
+  },
+],
+ });
 
 const Patient = mongoose.model("Patient", patientSchema);
 

@@ -4,8 +4,6 @@ import clearOldAudio from "../utils/Cleaner.js";
 import extractKeyPoints from "../utils/extractKeyPoints.js";
 import DraftNote from "../Model/DraftNote.js";
 
-// ===== MULTER SETUP =====
-
 
 
 
@@ -64,15 +62,12 @@ export const upload_Audio = async (req, res) => {
     console.log("Audio saved:", audioPath);
     console.log("Patient:", req.body);
 
-    // 1️⃣ Process audio with LLM
     const llmResult = await processAudio_Capture(audioPath);
 
      const { transcript, structuredNote } = llmResult;
-     console.log( `transcript ${transcript}`);
+    //  console.log( `transcript ${transcript}`);
      console.log(`structuredNote ${structuredNote}`);
-     return;
-
-// Optional: extract simple key points for UI
+    
 const keyPoints = extractKeyPoints(structuredNote);
 
 const draft = await DraftNote.create({
@@ -100,17 +95,6 @@ const draft = await DraftNote.create({
 };
 
 
-export const review_Draft_Note = async (req, res) => {
-  console.log(req.params.noteId)
 
-  try {
-    const draft = await DraftNote.findById(req.params.noteId);
-    if (!draft) {
-      return res.status(404).json({ error: "Draft note not found" });
-    }
-    res.json(draft);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-};
+
 
