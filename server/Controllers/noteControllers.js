@@ -4,6 +4,7 @@ import clearOldAudio from "../utils/Cleaner.js";
 import extractKeyPoints from "../utils/extractKeyPoints.js";
 import DraftNote from "../Model/DraftNote.js";
 import FinalNote from "../Model/FinalNote.js";
+import sendMail from "../Services/mail/SendMail.js";
 
 export const review_Draft_Note = async (req, res) => {
   console.log(req.params.noteId)
@@ -50,20 +51,22 @@ export const final_submit = async (req, res) => {
       });
     }
 
-    // 4️⃣ Create final note
     const finalNote = await FinalNote.create({
       patientId,
       structuredNote,
-      derivedFrom: noteId,      // VERY IMPORTANT
+      derivedFrom: noteId,      
       approvedBy: req.user?._id || null,
     });
 
-    // 5️⃣ Link to patient
-    await Patient.findByIdAndUpdate(patientId, {
-      $addToSet: { notes: finalNote._id },   // avoids duplicates
+    //Link to patient
+   let patient =  await Patient.findByIdAndUpdate(patientId, {
+      $addToSet: { notes: finalNote._id  },  
     });
+    console.log(patient)
 
-    // 6️⃣ Mark draft as approved
+    const email = patient.email
+
+
     draft.status = "approved";
     await draft.save();
 
@@ -72,6 +75,9 @@ export const final_submit = async (req, res) => {
       finalNoteId: finalNote._id,
       patientId,
     });
+
+   // send the Email from here ok 
+   await sendMail({email , structuredNote , subject :"Your Final Clinical Note"}); 
 
   } catch (err) {
     console.error("Finalize Error:", err);
