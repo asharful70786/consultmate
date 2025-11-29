@@ -10,8 +10,7 @@ async function connectDb() {
     console.log("===========   DB connected Successfully  ===========");
   } catch (error) {
     console.log("DB connection Error");
-    res.status(500).json({ error: error.message });
-  }
+    console.log(error);}
   
 };
 

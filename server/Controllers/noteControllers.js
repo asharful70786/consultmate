@@ -92,3 +92,41 @@ export const NoteDetails = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+export const edit_Final_Note =  async (req, res) => {
+  try {
+    const { structuredNote } = req.body;
+
+    const updated = await FinalNote.findByIdAndUpdate(
+      req.params.id,
+      { structuredNote },
+      { new: true }
+    );
+
+    if (!updated) {
+      return res.status(404).json({ message: "Note not found" });
+    }
+
+    res.json(updated);
+
+  } catch (err) {
+    console.error("UPDATE NOTE ERROR:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+}
+
+export const deleteNote = async (req, res) => {
+  try {
+    const deleted = await FinalNote.findByIdAndDelete(req.params.id);
+
+    if (!deleted) {
+      return res.status(404).json({ message: "Note not found" });
+    }
+
+    res.json({ message: "Note deleted successfully" });
+
+  } catch (err) {
+    console.error("DELETE NOTE ERROR:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+}

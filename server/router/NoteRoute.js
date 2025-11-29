@@ -1,6 +1,7 @@
 import express from "express";
-import { final_submit, NoteDetails, review_Draft_Note } from "../Controllers/noteControllers.js";
+import { deleteNote, edit_Final_Note, final_submit, NoteDetails, review_Draft_Note ,  } from "../Controllers/noteControllers.js";
 import CheckAuth from "../middleware/CheckAuth.js";
+import FinalNote from "../Model/FinalNote.js";
 
 
 const router = express.Router();
@@ -8,6 +9,10 @@ const router = express.Router();
 router.get("/review/:noteId", CheckAuth, review_Draft_Note);
 router.post("/finalize/:noteId", CheckAuth, final_submit);
 router.get("/note-details/:noteId", CheckAuth, NoteDetails);
+
+router.put("/note-details/:id",CheckAuth ,  edit_Final_Note);
+
+router.delete("/note-details/:id", CheckAuth , deleteNote);
 
 
 
