@@ -71,7 +71,11 @@ export default function App() {
       <Route path="/review-note" element={<ReviewNote />}/>
       <Route  path="/note-details" element={<ProtectedRoute> <NoteDetails /></ProtectedRoute>  } />
       <Route path="/profile" element={<ProtectedRoute> <Profile /></ProtectedRoute>} />
-      <Route path="/follow-up" element={<ProtectedRoute> <FollowUpDashboard /></ProtectedRoute>} />
+      <Route path="/follow-up" element={<ProtectedRoute> 
+      <MainLayout>
+        <FollowUpDashboard />
+      </MainLayout>
+      </ProtectedRoute>} />
 
 
 

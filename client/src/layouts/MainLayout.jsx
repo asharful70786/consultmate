@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 
+
 // Icons
 const DashboardIcon = () => (
   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -20,6 +21,17 @@ const SelectPatientIcon = () => (
     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
   </svg>
 );
+
+export const AppointmentIcon = () => (
+  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+      d="M8 7V3m8 4V3m-9 8h10m-11 8h12a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+      d="M9 15l2 2 4-4" />
+  </svg>
+);
+
+
 
 const ProfileIcon = () => (
   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -47,7 +59,8 @@ export default function MainLayout({ children }) {
     { path: "/", label: "Dashboard", icon: <DashboardIcon /> },
     { path: "/add-patient", label: "Add Patient", icon: <AddPatientIcon /> },
     { path: "/select-patient", label: "Select Patient", icon: <SelectPatientIcon /> },
-    { path: "/profile", label: "Profile", icon: <ProfileIcon /> }, // 👈 MOVED HERE
+     { path: "/follow-up", label: "Appointment", icon: <AppointmentIcon /> }, 
+    { path: "/profile", label: "Profile", icon: <ProfileIcon /> }, 
   ];
 
   const isActivePath = (path) => location.pathname === path;
