@@ -3,6 +3,7 @@ import {processAudio_Capture} from "../Services/Llm/openAi.js";
 import clearOldAudio from "../utils/Cleaner.js";
 import extractKeyPoints from "../utils/extractKeyPoints.js";
 import DraftNote from "../Model/DraftNote.js";
+import welcomeMail from "../Services/mail/WelcomeMail.js";
 
 
 
@@ -11,7 +12,8 @@ export const addNewPatient =  async (req, res) => {
   try {
     // Get count to generate new patientId
     const count = await Patient.countDocuments();
-    const newId = "P" + String(count + 1).padStart(3, "0"); // P001, P002...
+    const newId = "P" + String(count + 1).padStart(3, "0"); 
+    console.log(req.body);
 
     const patient = new Patient({
       ...req.body,
@@ -19,6 +21,7 @@ export const addNewPatient =  async (req, res) => {
     });
 
     await patient.save();
+    await welcomeMail({email : req.body.email  , patientId : newId , number : req.body.phone , name : req.body.name });
 
     res.json({ success: true, patientId: newId });
   } catch (err) {

@@ -15,6 +15,7 @@ connectDb();
 import authRouter from "./router/authRoute.js";
 import patientRouter from "./router/patientRoute.js";
 import NoteRouter from "./router/NoteRoute.js";
+import followUpRoutes from "./router/followUpRoutes.js";
 
 const app = express();
 app.use(express.json());
@@ -41,6 +42,7 @@ app.get('/', (req, res) => {
 
 // auth
 app.use('/api/auth', authRouter);
+app.use("/api/followups", followUpRoutes);
 app.use('/api', patientRouter);
 app.use('/api', NoteRouter);
 

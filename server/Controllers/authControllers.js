@@ -1,3 +1,4 @@
+import FinalNote from "../Model/FinalNote.js";
 import Patient from "../Model/patient.js";
 import User from "../Model/User.js";
 import bcrypt from "bcrypt";
@@ -80,20 +81,20 @@ export const stacks =  async (req, res) => {
       createdAt: { $gte: monthStart },
     });
 
-    // const totalNotes = await Note.countDocuments();
+    const totalNotes = await FinalNote.countDocuments();
 
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    // const todayNotes = await Note.countDocuments({
-    //   createdAt: { $gte: today },
-    // });
+    const todayNotes = await FinalNote.countDocuments({
+      createdAt: { $gte: today },
+    });
 
     res.json({
       totalPatients,
       newPatients,
-      // totalNotes,
-      // todayNotes,
+      totalNotes,
+      todayNotes,
     });
   } catch (err) {
     console.log(err);

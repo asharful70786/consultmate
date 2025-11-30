@@ -18,9 +18,26 @@ const FinalNoteSchema = new mongoose.Schema(
       default: Date.now,
     },
 
+    // Link to the draft it came from
+    derivedFrom: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "DraftNote",
+      default: null,
+    },
+
+    followUp: {
+      date: { type: String },
+      message: { type: String },
+      status: {
+        type: String,
+        enum: ["pending", "completed"],
+        default: "pending",
+      },
+    },
+
     approvedBy: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Doctor", // optional
+      ref: "Doctor",
       default: null,
     },
   },

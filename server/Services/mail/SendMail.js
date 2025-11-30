@@ -12,9 +12,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-async function sendMail({ email, structuredNote, subject }) {
-  // structuredNote = the full JSON object
-  const finalText = structuredNote?.structuredNote || "No note available";
+async function sendMail({ email, finalText, subject }) {
 
   const htmlTemplate = `
     <div style="font-family: Arial; line-height:1.6;">
@@ -24,9 +22,9 @@ async function sendMail({ email, structuredNote, subject }) {
   `;
 
   const info = await transporter.sendMail({
-    from: `Consultmate <${process.env.Node_Mailer_Email}>`,  // FIXED
+    from: `Consultmate <${process.env.Node_Mailer_Email}>`,
     to: email,
-    subject: subject || "Your Clinical Note ",
+    subject: subject || "Your Clinical Note",
     html: htmlTemplate,
   });
 
@@ -34,3 +32,4 @@ async function sendMail({ email, structuredNote, subject }) {
 }
 
 export default sendMail;
+

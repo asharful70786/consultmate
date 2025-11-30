@@ -21,69 +21,107 @@ export const review_Draft_Note = async (req, res) => {
 
 export const final_submit = async (req, res) => {
   try {
-    const { patientId, structuredNote } = req.body;
+    const { patientId } = req.body;
+    let { structuredNote } = req.body;
     const { noteId } = req.params;
 
     if (!patientId || !structuredNote) {
       return res.status(400).json({ error: "Missing required fields" });
     }
+    try {
+      structuredNote = JSON.parse(structuredNote);  
+    } catch (err) {
+      console.log("❌ Error parsing structuredNote JSON:", err);
+      return res.status(400).json({ error: "Invalid structuredNote JSON" });
+    }
 
+    let followUp = undefined;
+    if (
+      structuredNote.followUp &&
+      structuredNote.followUp.date
+    ) {
+      followUp = {
+        date: structuredNote.followUp.date,
+        message: structuredNote.followUp.message || "",
+        status: structuredNote.followUp.status || "pending",
+      };
+    }
     const draft = await DraftNote.findById(noteId);
-
     if (!draft) {
       return res.status(404).json({ error: "Draft note not found" });
     }
 
-    // 2️⃣ Prevent DOUBLE APPROVAL
     if (draft.status === "approved") {
-      return res.status(400).json({
-        error: "This draft note has already been approved",
-      });
+      return res.status(400).json({ error: "This draft note has already been approved" });
     }
-
-    // 3️⃣ Check if final note already exists
-    const existingFinal = await FinalNote.findOne({ patientId, derivedFrom: noteId });
+   const existingFinal = await FinalNote.findOne({
+      patientId,
+      derivedFrom: noteId,
+    });
 
     if (existingFinal) {
       return res.status(400).json({
         error: "A final note for this draft already exists",
-        finalNoteId: existingFinal._id
+        finalNoteId: existingFinal._id,
       });
     }
 
+    // ===========================
+    // 5️⃣ Create Final Note
+    // ===========================
     const finalNote = await FinalNote.create({
       patientId,
-      structuredNote,
-      derivedFrom: noteId,      
+      structuredNote: JSON.stringify(structuredNote),
+      derivedFrom: noteId,
       approvedBy: req.user?._id || null,
+      ...(followUp && { followUp }),
     });
 
-    //Link to patient
-   let patient =  await Patient.findByIdAndUpdate(patientId, {
-      $addToSet: { notes: finalNote._id  },  
-    });
-    console.log(patient)
+    // ===========================
+    // 6️⃣ Attach to Patient
+    // ===========================
+    const patient = await Patient.findByIdAndUpdate(
+      patientId,
+      { $addToSet: { notes: finalNote._id } },
+      { new: true }
+    );
 
-    const email = patient.email
+    if (!patient) {
+      return res.status(404).json({ error: "Patient not found" });
+    }
 
-
+    // ===========================
+    // 7️⃣ Mark Draft Approved
+    // ===========================
     draft.status = "approved";
     await draft.save();
 
-    res.status(200).json({
-      message: "Note finalized successfully",
+    // ===========================
+    // 8️⃣ Send Email to patient
+    // ===========================
+   await sendMail({
+  email: patient.email,
+  finalText: structuredNote.structuredNote,
+  subject: "Your Final Clinical Note",
+  });
+
+
+
+    // ===========================
+    // 9️⃣ Success Response
+    // ===========================
+    return res.status(200).json({
+      message: "Final note created successfully",
       finalNoteId: finalNote._id,
-      patientId,
+      followUp,
     });
 
-   // send the Email from here ok 
-   await sendMail({email , structuredNote , subject :"Your Final Clinical Note"}); 
-
   } catch (err) {
-    console.error("Finalize Error:", err);
+    console.error("❌ Finalize Error:", err);
     return res.status(500).json({ error: "Server error" });
   }
 };
+
 
 
 export const NoteDetails = async (req, res) => {
