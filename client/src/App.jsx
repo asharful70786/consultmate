@@ -14,6 +14,7 @@ import Indi_PatientDetails from "./pages/patient/Indi_PatientDetails";
 import ReviewNote from "./components/ReviewNote";
 import NoteDetails from "./components/NoteDetails";
 import Profile from "./components/Profile";
+import FollowUpDashboard from "./components/FollowUpDashBoard";
 
 export default function App() {
   return (
@@ -69,7 +70,8 @@ export default function App() {
 
       <Route path="/review-note" element={<ReviewNote />}/>
       <Route  path="/note-details" element={<ProtectedRoute> <NoteDetails /></ProtectedRoute>  } />
-      <Route path="profile" element={<ProtectedRoute> <Profile /></ProtectedRoute>} />
+      <Route path="/profile" element={<ProtectedRoute> <Profile /></ProtectedRoute>} />
+      <Route path="/follow-up" element={<ProtectedRoute> <FollowUpDashboard /></ProtectedRoute>} />
 
 
 
